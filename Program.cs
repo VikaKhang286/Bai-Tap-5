@@ -95,6 +95,7 @@ class Program
             if (isFound[i]) continue;
 
             int count = 1;
+
             for (int j = i + 1; j < arr.Length; j++)
             {
                 FoundElement(arr, isFound, i, j, ref count);
