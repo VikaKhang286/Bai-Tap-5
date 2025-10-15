@@ -35,11 +35,7 @@ class Program
 
         // 2. In mảng dữ liệu trên theo chiều đảo ngược.
         Console.WriteLine("\n2. Mảng theo chiều đảo ngược:");
-       for (int i = array.Length - 1; i >= 0; i--)
-        {
-            Console.Write(array[i] + " ");
-        }
-        Console.WriteLine();
+        ReverseArray(array);
 
         // 3. Tìm số phần tử giống nhau trong mảng và hiển thị số lượng giống nhau ra màn hình.
         Console.WriteLine("\n3. Số phần tử giống nhau trong mảng:");
@@ -51,19 +47,15 @@ class Program
 
         // 5. Chia mảng dữ liệu ban đầu thành mảng chẵn và mảng lẻ.
         Console.WriteLine("\n5. Mảng chẵn và mảng lẻ:");
-        var evenArray = array.Where(x => x % 2 == 0).ToArray();
-        var oddArray = array.Where(x => x % 2 != 0).ToArray();
-        Console.Write("Mảng chẵn: ");
-        PrintArray(evenArray);
-        Console.Write("Mảng lẻ: ");
-        PrintArray(oddArray);
+        EvenOddSplitArray(array);
 
         // 6. Sắp xếp mảng theo thứ tự giảm dần.
+        Console.WriteLine("\n6. Mảng sắp xếp giảm dần:");
         DescendedArray(array);
 
         // 7. Tìm kiếm phần tử lớn thứ hai trong mảng dữ liệu ban đầu.
         Console.WriteLine("\n7. Phần tử lớn thứ hai:");
-        SecondLargestNumber(array);
+        SecondLargestNumber(array, n);
 
         Console.ReadKey();
     }
@@ -71,59 +63,118 @@ class Program
     {
         Console.WriteLine(string.Join(" ", arr));
     }
-
-    static Dictionary<int,int> GetDictionary(int[] arr)
+    // 2. In mảng dữ liệu trên theo chiều đảo ngược.
+    static void ReverseArray(int[] arr)
     {
-        var elementCounts = new Dictionary<int, int>();
-        foreach (var item in arr)
+        for (int i = arr.Length - 1; i >= 0; i--)
         {
-            if (elementCounts.ContainsKey(item))
-                elementCounts[item]++;
-            else
-                elementCounts[item] = 1;
+            Console.Write(arr[i] + " ");
         }
-        return elementCounts;
+        Console.WriteLine();
     }
 
+    // 3. Tìm số phần tử giống nhau trong mảng và hiển thị số lượng giống nhau ra màn hình.
+    static void FoundElement(int[] arr, bool[] isFound, int i, int j, ref int count)
+    {
+        if (arr[i] == arr[j])
+        {
+            isFound[j] = true;
+            count++;
+        }
+    }
     static void DuplicatedElement(int[] arr)
     {
-        var dict = GetDictionary(arr);
+        bool[] isFound = new bool[arr.Length];
         bool isDuplicated = false;
-        foreach (var keyAndValue in dict)
+
+        for (int i = 0; i < arr.Length; i++)
         {
-            if (keyAndValue.Value > 1)
+            if (isFound[i]) continue;
+
+            int count = 1;
+            for (int j = i + 1; j < arr.Length; j++)
             {
-                Console.WriteLine($"Số {keyAndValue.Key} xuất hiện {keyAndValue.Value} lần");
+                FoundElement(arr, isFound, i, j, ref count);
+            }
+
+            if (count > 1)
+            {
+                Console.WriteLine($"Số {arr[i]} xuất hiện {count} lần");
                 isDuplicated = true;
             }
         }
         if (!isDuplicated) Console.WriteLine("Không có phần tử nào bị trùng.");
     }
 
+    // 4. In các phần tử duy nhất trong mảng.
     static void UniqueElements(int[] arr)
     {
-        var dict = GetDictionary(arr);
-        var uniqueElements = dict.Where(keyAndValue => keyAndValue.Value == 1).Select(keyAndValue => keyAndValue.Key).ToArray();
-        if (uniqueElements.Length > 0) Console.WriteLine(string.Join(" ", uniqueElements));
-        else Console.WriteLine("Không có phần tử duy nhất nào.");
+        bool isUnique = false;
+
+        for (int i = 0; i < arr.Length; i++)
+        {
+            int count = 0;
+
+            for (int j = 0; j < arr.Length; j++)
+            {
+                if (arr[i] == arr[j]) count++;
+            }
+
+            if (count == 1)
+            {
+                Console.Write(arr[i] + " ");
+                isUnique = true;
+            }
+        }
+
+        if (!isUnique) Console.WriteLine("Không có phần tử duy nhất nào.");
+        else Console.WriteLine(); 
     }
 
+    // 5. Chia mảng dữ liệu ban đầu thành mảng chẵn và mảng lẻ.
+    static void EvenOddSplitArray(int[] arr)
+    {
+        int evenCount = 0, oddCount = 0;
+        foreach (int num in arr)
+        {
+            if (num % 2 == 0)
+                evenCount++;
+            else
+                oddCount++;
+        }
+
+        int[] evenArr = new int[evenCount];
+        int[] oddArr = new int[oddCount];
+
+        int evenIndex = 0, oddIndex = 0;
+        foreach (int num in arr)
+        {
+            if (num % 2 == 0)
+                evenArr[evenIndex++] = num;
+            else
+                oddArr[oddIndex++] = num;
+        }
+
+        Console.Write("Mảng chẵn: ");
+        PrintArray(evenArr);
+        Console.Write("Mảng lẻ: ");
+        PrintArray(oddArr);
+    }
+
+    // 6. Sắp xếp mảng theo thứ tự giảm dần.
     static void DescendedArray(int[] arr)
     {
         for (int i = 0; i < arr.Length - 1; i++)
         {
             for (int j = i + 1; j < arr.Length; j++)
             {
-                Swap(arr, i, j);
+                SwapInArray(arr, i, j);
             }
         }
-
-        Console.WriteLine("\n6. Mảng sắp xếp giảm dần:");
-        foreach (int num in arr)
-            Console.Write(num + " ");
+        foreach (int num in arr) Console.Write(num + " ");
         Console.WriteLine();
     }
-    static void Swap(int[] arr, int i, int j)
+    static void SwapInArray(int[] arr, int i, int j)
     {
         if (arr[i] < arr[j])
         {
@@ -133,22 +184,29 @@ class Program
         }
     }
 
-    static void SecondLargestNumber(int[] arr)
-    {   
-        var uniqueValues = arr.Distinct().OrderByDescending(x => x).ToList();
+    // 7. Tìm kiếm phần tử lớn thứ hai trong mảng dữ liệu ban đầu.
+    static void SecondLargestNumber(int[] arr, int n)
+    {
+        int firstMax = int.MinValue;
+        int secondMax = int.MinValue;
 
-        int secondLargest = uniqueValues[1];
-        int count = arr.Count(x => x == secondLargest);
-
-        if (count > 1)
+        for (int i = 0; i < n; i++)
         {
-            Console.WriteLine($"Mảng không có phần tử lớn thứ hai (vì số {secondLargest} bị lặp lại).");
+            if (arr[i] > firstMax)
+            {
+                secondMax = firstMax;
+                firstMax = arr[i];
+            }
+            else if (arr[i] > secondMax && arr[i] < firstMax)
+            {
+                secondMax = arr[i];
+            }
         }
+
+        if (secondMax == int.MinValue)
+            Console.WriteLine("Không có phần tử lớn thứ hai vì tất cả các phần tử đều giống nhau hoặc chỉ có một giá trị lớn nhất.");
         else
-        {
-            Console.WriteLine($"Phần tử lớn thứ hai là: {secondLargest}");
-        }
-    
+            Console.WriteLine($"Phần tử lớn thứ hai là: {secondMax}");
     }
     
 }
