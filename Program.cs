@@ -24,7 +24,8 @@ class Program
         {
             Console.WriteLine("Số phần tử không hợp lệ.");
             return;
-        } else if (n == 1)
+        }
+        else if (n == 1)
         {
             Console.WriteLine("Mảng chỉ có một phần tử, không thể thực hiện các thao tác yêu cầu.");
             return;
@@ -59,10 +60,12 @@ class Program
 
         Console.ReadKey();
     }
+    
     static void PrintArray(int[] arr)
     {
         Console.WriteLine(string.Join(" ", arr));
     }
+
     // 2. In mảng dữ liệu trên theo chiều đảo ngược.
     static void ReverseArray(int[] arr)
     {
