@@ -140,10 +140,8 @@ class Program
         int evenCount = 0, oddCount = 0;
         foreach (int num in arr)
         {
-            if (num % 2 == 0)
-                evenCount++;
-            else
-                oddCount++;
+            if (num % 2 == 0) evenCount++;
+            else oddCount++;
         }
 
         int[] evenArr = new int[evenCount];
@@ -152,10 +150,8 @@ class Program
         int evenIndex = 0, oddIndex = 0;
         foreach (int num in arr)
         {
-            if (num % 2 == 0)
-                evenArr[evenIndex++] = num;
-            else
-                oddArr[oddIndex++] = num;
+            if (num % 2 == 0) evenArr[evenIndex++] = num;
+            else oddArr[oddIndex++] = num;
         }
 
         Console.Write("Mảng chẵn: ");
@@ -205,11 +201,8 @@ class Program
                 secondMax = arr[i];
             }
         }
-
-        if (secondMax == int.MinValue)
-            Console.WriteLine("Không có phần tử lớn thứ hai vì tất cả các phần tử đều giống nhau hoặc chỉ có một giá trị lớn nhất.");
-        else
-            Console.WriteLine($"Phần tử lớn thứ hai là: {secondMax}");
+        if (secondMax == int.MinValue) Console.WriteLine("Không có phần tử lớn thứ hai.");
+        else Console.WriteLine($"Phần tử lớn thứ hai là: {secondMax}");
     }
     
 }
